@@ -2,7 +2,7 @@ from ast import literal_eval
 import re
 
 def get_dimention():
-    dim_regex = '(?i)DIM\ *=\ *([0-9]*)\ *\n'
+    dim_regex = r'(?i)DIM\ *=\ *([0-9]*)\ *\n'
 
     dim_parsed = re.findall(dim_regex, file)
     if not dim_parsed:
@@ -12,7 +12,7 @@ def get_dimention():
 
 
 def get_population():
-    pop_regex = '(?i)POP\ *=\ *([0-9]*)\ *\n'
+    pop_regex = r'(?i)POP\ *=\ *([0-9]*)\ *\n'
 
     pop_parsed = re.findall(pop_regex, file)
     if not pop_parsed:
@@ -22,7 +22,7 @@ def get_population():
 
 
 def get_codification():
-    cod_regex = '(?i)COD\ *=\ *([A-Za-z\_]+)(?:\ *(?:\ *-\ *bounds\ *)?\ *=?\ *\[(\ *-?[0-9]+\.?[0-9]*)\ *\,\ *-?([0-9]+\.?[0-9]*)\ *\])?\ *\n'
+    cod_regex = r'(?i)COD\ *=\ *([A-Za-z\_]+)(?:\ *(?:\ *-\ *bounds\ *)?\ *=?\ *\[(\ *-?[0-9]+\.?[0-9]*)\ *\,\ *-?([0-9]+\.?[0-9]*)\ *\])?\ *\n'
 
     cod_parsed = re.findall(cod_regex, file)
     if not cod_parsed:
