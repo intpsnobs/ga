@@ -29,11 +29,11 @@ def get_codification():
         raise Exception("Parser", "Codification not found")
 
     key = str(cod_parsed[0][0])
-
+    minC, maxC = None,None
     if cod_parsed[0][1]:
-        min = int(cod_parsed[0][1])
-        max = int(cod_parsed[0][2])
-    return key, min, max
+        minC = int(cod_parsed[0][1])
+        maxC = int(cod_parsed[0][2])
+    return key, minC, maxC
 
 
 def parse(path: str):
