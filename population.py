@@ -6,7 +6,7 @@ def binary_random(size: int):
     return np.random.choice([0, 1], size=size)
 
 def integer_permutation(size: int, min: int, max: int):
-    return np.random.permutation(range(math.floor(min), math.floor(max+1)))
+    return rn.random.permutation(range(math.floor(min), math.floor(max+1)))
 
 def integer_random(size: int, min: int, max: int):
     return np.random.choice(range(math.floor(min), math.floor(max+1)), size)

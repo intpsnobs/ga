@@ -10,10 +10,11 @@ if __name__ == "__main__":
     population = get_population(**parse("input.cfg"))()
 
     def fitness(ind: list):
-        fit = 0
+        dim = len(ind)
+        fit = dim*(dim-1)
         for i in range(len(ind)-1):
             for j in range(i+1, len(ind)):
-                fit += (abs(ind[i]-ind[j]) == abs(i-j))
+                fit -= 2*(abs(ind[i]-ind[j]) == abs(i-j))
         return ind, fit
 
     pool = Pool(4)
@@ -22,9 +23,10 @@ if __name__ == "__main__":
     pool.close()
     pool.join()
 
-    evaluated_population.sort(key=lambda x: x[1])
-    
+    evaluated_population.sort(key=lambda x: -x[1])
+
     show_population(evaluated_population)
+
     
 
 
