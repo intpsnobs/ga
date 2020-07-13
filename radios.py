@@ -14,20 +14,27 @@ from log_handler import show_board, show_population
 
 if __name__ == "__main__":
     population = get_population(**parse("radio.cfg"))()
-    print(population)
     def fitness(ind : list):
-        pass
-        #fit = 
+        xrl = ind & 0b0000011111
+        xrs = (ind >> 5) & 0b0000011111
 
-    pool = Pool(4)
+        # rs [0-24] -> 5 bits
+        # rl [0-16] -> 5 bits
+        rl = 0+(16/31)*xrl
+        rs = 0+(24/31)*xrs
+
+        r = -1
+        FOn = (30*rs + 40*rl)/1360
+        Hn = max(0, rs + 2*rl - 40)/16
+        fit = FOn + r*Hn
+
+        return ind, fit
+
+    pool = Pool(6)
     start_time = time.time()
-    try:
-        evaluated_population = pool.map(fitness, population)
-    except:
-        pass
-    finally:
-        pool.close()
-        pool.join()
+    evaluated_population = pool.map(fitness, population)    
+    pool.close()
+    pool.join()
 
     evaluated_population.sort(key=lambda x: x[1])
     
