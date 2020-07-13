@@ -22,8 +22,8 @@ def show_population(population: list, top=10, best=True):
 
     best_individual, best_fitness = population[0]
     if best:
-        print("BEST %s: fit(%d) " % (best_individual, best_fitness))
-        show_board(best_individual)
+        print("BEST %s: fit(%f) " % (best_individual, best_fitness))
+        # show_board(best_individual)
 
-    worst_individual, wordt_fitness = population[-1]
-    print("WORST %s: fit(%d) " % (worst_individual, wordt_fitness))
+    worst_individual, worst_fitness = population[-1]
+    print("WORST %s: fit(%f) " % (worst_individual, worst_fitness))

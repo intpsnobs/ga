@@ -15,8 +15,8 @@ from log_handler import show_board, show_population
 if __name__ == "__main__":
     population = get_population(**parse("radio.cfg"))()
     def fitness(ind : list):
-        xrl = ind & 0b0000011111
-        xrs = (ind >> 5) & 0b0000011111
+        xrl = ind[0] & 0b0000011111
+        xrs = (ind[0] >> 5) & 0b0000011111
 
         # rs [0-24] -> 5 bits
         # rl [0-16] -> 5 bits
@@ -28,15 +28,15 @@ if __name__ == "__main__":
         Hn = max(0, rs + 2*rl - 40)/16
         fit = FOn + r*Hn
 
-        return ind, fit
+        return ind[0], fit
 
-    pool = Pool(6)
+    pool = Pool(4)
     start_time = time.time()
-    evaluated_population = pool.map(fitness, population)    
+    evaluated_population = pool.map(fitness, population)
     pool.close()
     pool.join()
 
-    evaluated_population.sort(key=lambda x: x[1])
+    evaluated_population.sort(key=lambda x: -x[1])
     
     show_population(evaluated_population)
     

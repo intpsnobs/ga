@@ -3,13 +3,13 @@ import numpy as np
 import math
 
 def binary_random(size: int):
-    return np.random.choice([0, 1], size=size)
+    return np.random.randint(0, 1, size)
 
 def integer_permutation(size: int, min: int, max: int):
-    return rn.random.permutation(range(math.floor(min), math.floor(max+1)))
+    return np.random.permutation(range(math.floor(min), math.floor(max+1)))
 
 def integer_random(size: int, min: int, max: int):
-    return np.random.choice(range(math.floor(min), math.floor(max+1)), size)
+    return np.random.randint(math.floor(min), math.floor(max+1), size)
 
 def real_random(size: int, min: int, max: int):
     return np.random.uniform(min, max, size)
