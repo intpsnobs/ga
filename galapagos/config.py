@@ -1,27 +1,38 @@
 from ast import literal_eval
 import re
 
-def get_dimention():
+
+def get_dimention() -> dict:
     dim_regex = r'(?i)DIM\ *=\ *([0-9]*)\ *\n'
 
     dim_parsed = re.findall(dim_regex, file)
     if not dim_parsed:
         raise Exception("Parser", "Dimention not found")
 
-    return int(dim_parsed[0])
+    return dict(chromosome_size=int(dim_parsed[0]))
 
 
-def get_population():
+def get_population() -> dict:
     pop_regex = r'(?i)POP\ *=\ *([0-9]*)\ *\n'
 
     pop_parsed = re.findall(pop_regex, file)
     if not pop_parsed:
         raise Exception("Parser", "Population not found")
 
-    return int(pop_parsed[0])
+    return dict(population_size=int(pop_parsed[0]))
 
 
-def get_codification():
+def get_cicles() -> dict:
+    run_regex = r'(?i)RUN\ *=\ *([0-9]*)\ *\n'
+
+    run_parsed = re.findall(run_regex, file)
+    if not run_parsed:
+        raise Exception("Parser", "RUN not found")
+
+    return dict(cicles=int(run_parsed[0]))
+
+
+def get_codification() -> dict:
     cod_regex = r'(?i)COD\ *=\ *([A-Za-z\_]+)(?:\ *(?:\ *-\ *bounds\ *)?\ *=?\ *\[(\ *-?[0-9]+\.?[0-9]*)\ *\,\ *-?([0-9]+\.?[0-9]*)\ *\])?\ *\n'
 
     cod_parsed = re.findall(cod_regex, file)
@@ -29,18 +40,20 @@ def get_codification():
         raise Exception("Parser", "Codification not found")
 
     key = str(cod_parsed[0][0])
-    minC, maxC = None,None
+    min, max = None, None
     if cod_parsed[0][1]:
-        minC = int(cod_parsed[0][1])
-        maxC = int(cod_parsed[0][2])
-    return key, minC, maxC
+        min = int(cod_parsed[0][1])
+        max = int(cod_parsed[0][2])
+    return dict(key=key, min=min, max=max)
 
 
-def parse(path: str):
+def parse(path: str) -> dict:
     global file
-    
+
     file = open(path, 'r').read()
-    return dict(zip(
-        ("population_size", "chromosome_size", "key", "min", "max"),
-        (get_population(), get_dimention(), *get_codification())
-    ))
+    return dict(
+        **get_dimention(),
+        **get_population(),
+        **get_cicles(),
+        **get_codification()
+    )
