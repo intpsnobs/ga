@@ -1,5 +1,4 @@
-from galapagos import population 
-from galapagos import config
+from galapagos import population, config, selector
 
 from multiprocessing import Pool
 
@@ -16,4 +15,4 @@ def run(fitness: callable, config_file: str = "input.cfg", pool_size: int = 4):
     pool.close()
     pool.join()
 
-    print(evaluated_population)
+    print(selector.fitness_proportionate_selection(evaluated_population))
