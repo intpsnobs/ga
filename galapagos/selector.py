@@ -5,14 +5,28 @@ import numpy as np
 
 def fitness_proportionate_selection(population, num=2):
     selected = []
-    max     = sum([c[1] for c in population])
-    pick    = random.uniform(0, max)
-    current = 0
-    for _ in range(2):
-        for chromosome in population:
-            current += chromosome[1]
-            if current > pick:
-                selected.append(chromosome)
+    sum_fit  = float(sum([c[1] for c in population]))
+
+    for _ in range(num):
+        lucky_number = random.random()
+        prev_probability = 0.0
+
+        for i, c in enumerate(population):
+            if (prev_probability + (c[1] / sum_fit)) >= lucky_number:
+                selected.append(c)
+                sum_fit -= c[1]
+                del population[i]
                 break
+            prev_probability += c[1] / sum_fit
 
     return np.array(selected, dtype=object)
+
+def stochastic_tournament(population, k=2, kp=1):
+    def fight(subpop):
+        lucky_number = random.random()
+        if kp >= lucky_number:
+            return subpop[1]
+        return subpop[0]
+    weights = [1 for i in population]
+    return [fight(sorted(random.choices(population, k=k, weights=weights), key=lambda x: x[1])[0::k-1]) for i in population]
+    

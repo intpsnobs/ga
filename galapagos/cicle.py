@@ -15,4 +15,6 @@ def run(fitness: callable, config_file: str = "input.cfg", pool_size: int = 4):
     pool.close()
     pool.join()
 
-    print(selector.fitness_proportionate_selection(evaluated_population))
+    selected = selector.stochastic_tournament(evaluated_population)
+    print(selected)
+    print(len(selected))
