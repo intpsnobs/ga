@@ -1,6 +1,7 @@
 import galapagos
 from galapagos.utils import binaryToInt
 from numpy import ndarray
+from galapagos.selector import fitness_proportionate_selection
 
 # Problema do Radio
 # 40 funcionarios
@@ -28,6 +29,7 @@ def fitness(ind: ndarray):
 if __name__ == "__main__":
     galapagos.run(
         fitness,
+        selector=fitness_proportionate_selection,
         config_file="radio.cfg"
     )
 

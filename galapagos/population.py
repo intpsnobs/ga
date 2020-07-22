@@ -4,33 +4,34 @@ import math
 
 
 def binary_random(size: int) -> np.ndarray:
-    return np.random.randint(0, 2, size)
+    return np.random.randint(0, 2, size, dtype="uint8")
 
 
-def integer_permutation(size: int, min: int, max: int) -> np.ndarray:
-    return np.random.permutation(range(math.floor(min), math.floor(max+1)))
+def integer_permutation(size: int, low: int, hight: int) -> np.ndarray:
+    return np.random.permutation(range(math.floor(low), math.floor(hight+1)))
 
 
-def integer_random(size: int, min: int, max: int) -> np.ndarray:
-    return np.random.randint(math.floor(min), math.floor(max+1), size)
+def integer_random(size: int, low: int, hight: int) -> np.ndarray:
+    return np.random.randint(math.floor(low), math.floor(hight+1), size)
 
 
-def real_random(size: int, min: int, max: int) -> np.ndarray:
-    return np.random.uniform(min, max, size)
+def real_random(size: int, low: int, hight: int) -> np.ndarray:
+    return np.random.uniform(low, hight, size)
 
 
-def gen(population: int, populationgen: callable) -> np.ndarray:
-    return np.array([populationgen() for _ in range(population)])
+def gen(population_size, populationgen: callable, population=[]) -> np.ndarray:
+    num = (population_size - len(population))
+    return np.array(population + [populationgen() for _ in range(num)])
 
 
 def get(params) -> callable:
-    chromosome_size, min, max, key = params["chromosome_size"], params["min"], params["max"], params["key"]
+    chromosome_size, low, hight, key = params["chromosome_size"], params["low"], params["hight"], params["key"]
 
     generator = {
         "BIN": partial(binary_random, chromosome_size),
-        "INT_PERM": partial(integer_permutation, chromosome_size, min, max),
-        "INT": partial(integer_random, chromosome_size, min, max),
-        "REAL": partial(real_random, chromosome_size, min, max)
+        "INT_PERM": partial(integer_permutation, chromosome_size, low, hight),
+        "INT": partial(integer_random, chromosome_size, low, hight),
+        "REAL": partial(real_random, chromosome_size, low, hight)
     }
 
     if key not in generator:

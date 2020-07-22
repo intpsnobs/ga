@@ -40,11 +40,11 @@ def get_codification() -> dict:
         raise Exception("Parser", "Codification not found")
 
     key = str(cod_parsed[0][0])
-    min, max = None, None
+    low, hight = None, None
     if cod_parsed[0][1]:
-        min = int(cod_parsed[0][1])
-        max = int(cod_parsed[0][2])
-    return dict(key=key, min=min, max=max)
+        low = int(cod_parsed[0][1])
+        hight = int(cod_parsed[0][2])
+    return dict(key=key, low=low, hight=hight)
 
 
 def parse(path: str) -> dict:

@@ -13,13 +13,13 @@ def fitness_proportionate_selection(population, num=2):
 
         for i, c in enumerate(population):
             if (prev_probability + (c[1] / sum_fit)) >= lucky_number:
-                selected.append(c)
+                selected.append(np.array(c[0]))
                 sum_fit -= c[1]
                 del population[i]
                 break
             prev_probability += c[1] / sum_fit
 
-    return np.array(selected, dtype=object)
+    return selected
 
 def stochastic_tournament(population, k=2, kp=1):
     def fight(subpop):
