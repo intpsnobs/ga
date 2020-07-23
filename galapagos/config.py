@@ -11,6 +11,15 @@ def get_dimention() -> dict:
 
     return dict(chromosome_size=int(dim_parsed[0]))
 
+def get_number_generations() -> dict:
+    gen_regex = r'(?i)GEN\ *=\ *([0-9]*)\ *\n'
+
+    gen_parsed = re.findall(gen_regex, file)
+    if not gen_parsed:
+        raise Exception("Parser", "Number of generations not found")
+
+    return dict(chromosome_size=int(gen_parsed[0]))
+
 
 def get_population() -> dict:
     pop_regex = r'(?i)POP\ *=\ *([0-9]*)\ *\n'
@@ -55,5 +64,6 @@ def parse(path: str) -> dict:
         **get_dimention(),
         **get_population(),
         **get_cicles(),
-        **get_codification()
+        **get_codification(),
+        **get_number_generations()
     )

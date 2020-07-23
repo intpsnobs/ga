@@ -11,11 +11,18 @@ def fitness_proportionate_selection(population, num=2):
         lucky_number = random.random()
         prev_probability = 0.0
 
+        if removed_fitness is not None:
+            population[index][1] = removed_fitness
+            sum_fit += removed_fitness
+            removed_fitness = None
+
         for i, c in enumerate(population):
             if (prev_probability + (c[1] / sum_fit)) >= lucky_number:
                 selected.append(np.array(c[0]))
                 sum_fit -= c[1]
-                del population[i]
+                removed_fitness = c[1]
+                index = i
+                c[1] = 0 
                 break
             prev_probability += c[1] / sum_fit
 
