@@ -3,11 +3,12 @@ import random
 import numpy as np
 
 
-def fitness_proportionate_selection(population, num=2):
+def fitness_proportionate_selection(population: np.ndarray) -> np.ndarray:
     selected = []
+    removed_fitness = None
     sum_fit  = float(sum([c[1] for c in population]))
 
-    for _ in range(num):
+    for _ in range(len(population)):
         lucky_number = random.random()
         prev_probability = 0.0
 
@@ -26,14 +27,14 @@ def fitness_proportionate_selection(population, num=2):
                 break
             prev_probability += c[1] / sum_fit
 
-    return selected
+    return np.array(selected)
 
-def stochastic_tournament(population, k=2, kp=1):
+def stochastic_tournament(population: np.ndarray, k: int=2, kp: int=1) -> np.array:
     def fight(subpop):
         lucky_number = random.random()
         if kp >= lucky_number:
-            return subpop[1]
-        return subpop[0]
+            return subpop[1][0]
+        return subpop[0][0]
     weights = [1 for i in population]
-    return [fight(sorted(random.choices(population, k=k, weights=weights), key=lambda x: x[1])[0::k-1]) for i in population]
+    return np.array([fight(sorted(random.choices(population, k=k, weights=weights), key=lambda x: x[1])[0::k-1]) for i in population])
     

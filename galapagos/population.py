@@ -1,6 +1,7 @@
 from functools import partial
 import numpy as np
 import math
+from os import environ
 
 
 def binary_random(size: int) -> np.ndarray:
@@ -24,8 +25,8 @@ def gen(population_size, populationgen: callable, population=[]) -> np.ndarray:
     return np.array(population + [populationgen() for _ in range(num)])
 
 
-def get(params) -> callable:
-    chromosome_size, low, hight, key = params["chromosome_size"], params["low"], params["hight"], params["key"]
+def get() -> callable:
+    chromosome_size, low, hight, key = int(environ["DIM"]), int(environ["LOW"]), int(environ["HIGHT"]), environ["COD"]
 
     generator = {
         "BIN": partial(binary_random, chromosome_size),
@@ -38,4 +39,4 @@ def get(params) -> callable:
         raise Exception(
             "Population", (f'key "{key}"" does not exist use one of {[i for i in generator]} instead'))
 
-    return partial(gen, params["population_size"], generator[key])
+    return partial(gen, int(environ["POP"]), generator[key])
