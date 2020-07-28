@@ -1,12 +1,11 @@
-import galapagos
+import galapagos as gp
 from galapagos.utils import binaryToInt
 from numpy import ndarray
 import galapagos.selector as sl
 import galapagos.operators.crossover as cr
 import galapagos.operators.mutation as mt
-from os import environ
 import math
-import matplotlib.pyplot as plt
+from galapagos.log_handler import plot_runs
 
 # Problema do Radio
 # 40 funcionarios
@@ -33,34 +32,15 @@ def fitness(ind: ndarray):
 
 if __name__ == "__main__":
 
-    generations = galapagos.run(
-        fitness,
-        mutation_function=mt.bit_flip,
-        crossover_function=cr.two_points,
-        select_function=sl.fitness_proportionate_selection,
-        config_file="radio.cfg"
+    plot_runs(
+        gp.run(
+            fitness,
+            mutation_function=mt.bit_flip,
+            crossover_function=cr.two_points,
+            select_function=sl.fitness_proportionate_selection,
+            config_file="radio.cfg"
+        )
     )
-
-    runs = int(environ["RUN"])
-    size = math.floor(runs/3)
-
-    fig, axs = plt.subplots(size, 3, figsize=(10,10))
-
-    run = 0
-    for line in axs:
-        for ax in line:
-            ax.plot([x["best"][1] for x in generations[run]], label="best")
-            ax.plot([x["worst"][1] for x in generations[run]], color='r', label="worst")
-            ax.legend()
-            ax.set_title('run: %d | best fit: %.2f' % (run+1, generations[run][0]["best"][1]))
-            ax.set_xlabel("Generations")
-            ax.set_ylabel("Fitness")
-            run=run+1
-
-    # for i, generation in enumerate(generations):
-    #     plt.plot([x[1] for x in generation])
-    fig.tight_layout(pad=0.4)
-    plt.show()
 
 
 '''

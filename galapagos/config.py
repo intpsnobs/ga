@@ -1,6 +1,7 @@
 from ast import literal_eval
 import re
 import os
+import sys
 
 
 def get_dimention() -> dict:
@@ -93,7 +94,7 @@ def get_elitism() -> dict:
 
 def parse(path: str) -> dict:
     global file
-
+    os.environ["GA_TITLE"] = sys.argv[0][:-3:]
     file = open(path, 'r').read()
     get_dimention()
     get_population()
