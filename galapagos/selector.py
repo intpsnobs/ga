@@ -2,7 +2,6 @@
 import random
 import numpy as np
 
-
 def fitness_proportionate_selection(population: np.ndarray) -> np.ndarray:
     selected = []
     removed_fitness = None

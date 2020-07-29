@@ -23,6 +23,7 @@ if __name__ == "__main__":
             mutation_function=mt.swap,
             crossover_function=cr.pmx,
             select_function=sl.fitness_proportionate_selection,
-            config_file="n_queens.cfg"
+            config_file="n_queens.cfg",
+            pool_size=1
         )
     )

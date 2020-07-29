@@ -31,12 +31,12 @@ def evaluate(fitness: callable, population: np.ndarray, pool_size: int):
     return evaluated_population
 
 
-def mutate(population: np.ndarray, mutation_function: callable) -> np.ndarray:
+def mutate(population: np.ndarray, mutation_function: callable, **kwargs) -> np.ndarray:
     individual_chance = np.random.rand(len(population))
 
     for i in range(len(individual_chance)-1):
         if individual_chance[i] <= float(environ["PM"]):
-            population[i] = mutation_function(population[i])
+            population[i] = mutation_function(population[i], **kwargs)
 
     return population
 
@@ -65,7 +65,7 @@ def generation_run(
 ) -> dict:
     generations_hist = {"best": [], "avg": [],
                         "worst": [], "winner": (None, -1)}
-
+    
     for _ in tqdm(range(int(environ["GEN"])), desc=f'Run {run}', unit=" gen"):
 
         evaluated = evaluate(fitness, population, pool_size)
@@ -88,7 +88,8 @@ def generation_run(
                 selected,
                 crossover_function
             ),
-            mutation_function
+            mutation_function, 
+            iteration=_
         )
 
         if environ["EL"] == "true":

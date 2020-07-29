@@ -60,16 +60,16 @@ def get_codification() -> dict:
         raise Exception("Parser", "Codification not found")
 
     key = str(cod_parsed[0][0])
-    low, hight = None, None
+    low, high = None, None
     if cod_parsed[0][1]:
         low = int(cod_parsed[0][1])
-        hight = int(cod_parsed[0][2])
+        high = int(cod_parsed[0][2])
 
     os.environ["COD"] = cod_parsed[0][0] 
     os.environ["LOW"] = cod_parsed[0][1] if cod_parsed[0][1] != "" else "0"
-    os.environ["HIGHT"] = cod_parsed[0][2] if cod_parsed[0][2] != "" else "10"
+    os.environ["HIGH"] = cod_parsed[0][2] if cod_parsed[0][2] != "" else "10"
 
-    return dict(key=key, low=low, hight=hight)
+    return dict(key=key, low=low, high=high)
 
 def get_operator_probability() -> dict:
     pc = re.findall(r'(?i)(PC)\ *=\ *([0-9]+\.?[0-9]*)\ *', file)
