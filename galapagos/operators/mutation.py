@@ -1,6 +1,6 @@
 import numpy as np
 
-import os
+from os import environ
 
 def bit_flip(chromosome: np.ndarray, **kwargs) -> np.ndarray:
     choose = np.random.rand(len(chromosome))
@@ -22,18 +22,12 @@ def swap(chromosome: np.ndarray, **kwargs):
 
 def random_replacement(chromosome: np.ndarray, **kwargs) -> np.ndarray:
     point = np.random.randint(len(chromosome))
-    chromosome[point] = np.random.randint(low=int(os.environ["LOW"]), high=int(os.environ["HIGH"]))
-
-__T = int(os.environ["GEN"])
-__u = int(os.environ["HIGH"])
-__l = int(os.environ["LOW"])
+    chromosome[point] = np.random.randint(low=int(environ["LOW"]), high=int(environ["HIGH"]))
 
 def __delta(t, y, b=5):
-    global __T
-    return y * ( 1 - np.random.rand() ** (( (1-t)/__T)**b) )
+    return y * ( 1 - np.random.rand() ** (( (1-t)/int(environ["GEN"]))**b) )
 
 def michalewicz(chromosome: np.ndarray, iteration: int, **kwargs) -> np.ndarray:
-    global __T, __u, __l
     for c in chromosome:
-        c += __delta(iteration, abs(c - (__u if np.random.randint(0, 2) else __l) ) )
+        c += __delta(iteration, abs(c - (int(environ["HIGH"]) if np.random.randint(0, 2) else int(environ["LOW"])) ) )
     

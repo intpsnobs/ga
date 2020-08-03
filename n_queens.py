@@ -17,13 +17,13 @@ def fitness(individual: ndarray):
 
 
 if __name__ == "__main__":
-    plot_runs(
-        gp.run(
-            fitness,
-            mutation_function=mt.swap,
-            crossover_function=cr.pmx,
-            select_function=sl.fitness_proportionate_selection,
-            config_file="n_queens.cfg",
-            pool_size=1
-        )
+    result = gp.run(
+        fitness,
+        mutation_function=mt.swap,
+        crossover_function=cr.pmx,
+        select_function=sl.stochastic_tournament,
+        config_file="n_queens.cfg"
     )
+
+    # print(result)
+    plot_runs(result)

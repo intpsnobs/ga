@@ -1,9 +1,12 @@
 from galapagos import population, config, log_handler
 import numpy as np
-from multiprocessing import Pool
+from pathos.multiprocessing import ProcessingPool as Pool
+# from pathos.multiprocessing import ThreadingPool as Pool
 from os import environ
 from functools import reduce
 from tqdm import tqdm
+from functools import partial
+import time
 
 
 def select(population: np.ndarray, selection_function: callable):
@@ -25,20 +28,16 @@ def evaluate(fitness: callable, population: np.ndarray, pool_size: int):
     evaluated_population = pool.map(fitness, population)
     evaluated_population.sort(key=lambda x: x[1])
 
-    pool.close()
-    pool.join()
-
-    return evaluated_population
+    return np.array(evaluated_population, dtype=object)
 
 
 def mutate(population: np.ndarray, mutation_function: callable, **kwargs) -> np.ndarray:
-    individual_chance = np.random.rand(len(population))
 
-    for i in range(len(individual_chance)-1):
-        if individual_chance[i] <= float(environ["PM"]):
-            population[i] = mutation_function(population[i], **kwargs)
+    def will_mutate(individual):
+        rnd = np.random.rand()
+        return mutation_function(individual, **kwargs) if rnd <= float(environ["PM"]) else individual
 
-    return population
+    return np.array(list(map(will_mutate, population)))
 
 
 def crossover(population: np.ndarray, crossover: callable) -> np.ndarray:

@@ -26,7 +26,7 @@ def gen(population_size, populationgen: callable, population=[]) -> np.ndarray:
 
 
 def get() -> callable:
-    chromosome_size, low, high, key = int(environ["DIM"]), int(environ["LOW"]), int(environ["high"]), environ["COD"]
+    chromosome_size, low, high, key = int(environ["DIM"]), int(environ["LOW"]), int(environ["HIGH"]), environ["COD"]
 
     generator = {
         "BIN": partial(binary_random, chromosome_size),

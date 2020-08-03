@@ -2,6 +2,8 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 from os import environ
+from scipy.interpolate import CubicSpline
+
 
 def show_board(positions: list):
     size = len(positions)
@@ -16,10 +18,11 @@ def show_board(positions: list):
             print('\033[33m'+tile, end=" ")
         print("\033[0m |")
 
+
 def show_population(population: list, top=10, best=True):
     size_population = len(population)
     print(f"Top {top}:")
-    for i in range(size_population if (top>size_population) else top):
+    for i in range(size_population if (top > size_population) else top):
         print(f"{population[i][0]}: fit({population[i][1]})")
     print()
 
@@ -38,6 +41,7 @@ def show_winner(hist: dict):
     print("fitness: %f" % hist["champion"][1])
     print("==================================")
 
+
 def plot_runs(hist: dict):
     runs_num = int(environ["RUN"])
 
@@ -45,9 +49,9 @@ def plot_runs(hist: dict):
 
     x = 2
 
-
-    fig, axs = plt.subplots(x, y, figsize=(10,10), constrained_layout=True)
-    fig.suptitle('%s | best fit: %.4f' % (environ["GA_TITLE"], hist["champion"][1]), fontsize=16)
+    fig, axs = plt.subplots(x, y, figsize=(10, 10), constrained_layout=True)
+    fig.suptitle('%s | best fit: %.4f' %
+                 (environ["GA_TITLE"], hist["champion"][1]), fontsize=16)
 
     run = 0
     for line in axs:
@@ -57,12 +61,15 @@ def plot_runs(hist: dict):
             avg = [x for x in hist["runs"][run]["avg"]]
 
             ax.plot(best, label="best")
-            ax.plot(worst, color='r', label="worst", alpha=0.7, linestyle='dotted')
+            spline = CubicSpline(list(range(len(worst))), worst)
+            ax.plot([spline(i) for i in range(len(worst))],
+                    color='r', label="worst", alpha=0.4, linestyle='dotted')
             ax.plot(avg, color='k', label="avg", alpha=0.9, linestyle='dashed')
             ax.legend()
-            ax.set_title('run: %d | best fit: %.4f' % (run+1, hist["runs"][run]["winner"][1]))
+            ax.set_title('run: %d | best fit: %.4f' %
+                         (run+1, hist["runs"][run]["winner"][1]))
             ax.set_xlabel("Generations")
             ax.set_ylabel("Fitness")
-            run=run+1
+            run = run+1
 
     plt.show()
