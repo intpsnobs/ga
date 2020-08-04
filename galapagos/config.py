@@ -95,6 +95,8 @@ def get_elitism() -> dict:
 def parse(path: str) -> dict:
     global file
     os.environ["GA_TITLE"] = sys.argv[0][:-3:]
+    os.environ["OUT_PATH"] = "out/"
+
     file = open(path, 'r').read()
     get_dimention()
     get_population()

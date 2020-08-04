@@ -5,6 +5,8 @@ from os import environ
 
 
 def binary_random(size: int) -> np.ndarray:
+    environ["LOW"] = "0"
+    environ["HIGH"] = "1"
     return np.random.randint(0, 2, size, dtype="uint8")
 
 

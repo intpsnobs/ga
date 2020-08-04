@@ -70,7 +70,7 @@ def generation_run(
         evaluated = evaluate(fitness, population, pool_size)
 
         avg = reduce(lambda a, b: a+b[1], evaluated, 0)/len(evaluated)
-
+        
         generations_hist["best"].append(evaluated[-1])
         generations_hist["avg"].append(avg)
         generations_hist["worst"].append(evaluated[0])
@@ -107,7 +107,8 @@ def run(
     crossover_function: callable,
     mutation_function: callable,
     config_file: str = "input.cfg",
-    pool_size: int = 4
+    pool_size: int = 4,
+    phenotype: callable = None
 ) -> dict:
 
     config.parse(config_file)
@@ -137,6 +138,6 @@ def run(
 
     runs_hist["runs"] = np.array(runs_hist["runs"], dtype=object)
 
-    log_handler.show_winner(runs_hist)
+    log_handler.show_winner(runs_hist, phenotype)
 
     return runs_hist

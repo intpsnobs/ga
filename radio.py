@@ -5,7 +5,7 @@ import galapagos.selector as sl
 import galapagos.operators.crossover as cr
 import galapagos.operators.mutation as mt
 import math
-from galapagos.log_handler import plot_runs
+from galapagos.log_handler import plot_runs, convergence_chart
 
 # Problema do Radio
 # 40 funcionarios
@@ -13,14 +13,29 @@ from galapagos.log_handler import plot_runs
 # L = Radio Luxo: 2/dia -> R$40 (Restricao: max 32 funcionarios)
 # f(x) =
 
+def show(chromosome: ndarray):
+    rl, rs = normalization(chromosome)
 
-def fitness(ind: ndarray):
+    out = f'Luxury radio: {rl}\n'
+    out += f'Standard radio: {rs}\n'
+    out += f'Profit: {(40*rl+30*rs)}'
+
+    return out
+
+
+
+def normalization(ind: ndarray):
     xrl = binaryToInt(ind[:len(ind)//2])
     xrs = binaryToInt(ind[len(ind)//2:])
     # rs [0-24] -> 5 bits
     # rl [0-16] -> 5 bits
     rl = math.floor(0+(16/31)*xrl)
     rs = math.floor(0+(24/31)*xrs)
+
+    return rl, rs
+
+def fitness(ind: ndarray):
+    rl, rs = normalization(ind)
 
     r = -1
     FOn = (30*rs + 40*rl)/1360
@@ -32,15 +47,19 @@ def fitness(ind: ndarray):
 
 if __name__ == "__main__":
 
-    plot_runs(
-        gp.run(
-            fitness,
-            mutation_function=mt.bit_flip,
-            crossover_function=cr.two_points,
-            select_function=sl.fitness_proportionate_selection,
-            config_file="radio.cfg"
-        )
+    
+    result = gp.run(
+        fitness,
+        mutation_function=mt.bit_flip,
+        crossover_function=cr.two_points,
+        select_function=sl.fitness_proportionate_selection,
+        config_file="radio.cfg",
+        phenotype=show
     )
+    
+
+    convergence_chart(result, False)
+    plot_runs(result)
 
 
 '''
