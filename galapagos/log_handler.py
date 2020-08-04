@@ -5,20 +5,6 @@ from os import environ
 from scipy.interpolate import CubicSpline
 
 
-def show_board(positions: list):
-    size = len(positions)
-    board = np.full((size, size), '\033[0m.')
-
-    for index, item in enumerate(positions):
-        board[index][item-1] = '♕'
-
-    for row in board:
-        print("\033[0m|", end=" ")
-        for tile in row:
-            print('\033[33m'+tile, end=" ")
-        print("\033[0m |")
-
-
 def show_population(population: list, top=10, best=True):
     size_population = len(population)
     print(f"Top {top}:")
@@ -40,10 +26,11 @@ def show_winner(hist: dict, phenotype: callable):
         out_file.write("=============Winner===============\n\n")
         out_file.write("Chromosome: \n%s\n\n" % np.array_str(hist["champion"][0]))
         out_file.write("Fitness: %f\n" % hist["champion"][1])
-        
 
         out_file.write("\n\n=============Config===============\n\n")
-        out_file.write(f'Codification: {environ["COD"]} - Bounds = [{environ["LOW"]},{environ["HIGH"]}]\n')
+        out_file.write(
+            f'Codification: {environ["COD"]} - Bounds = [{environ["LOW"]},{environ["HIGH"]}]\n'
+        )
         out_file.write(f'Dimention: {environ["DIM"]}\n')
         out_file.write(f'Population size: {environ["POP"]}\n')
         out_file.write(f'Runs: {environ["RUN"]}\n')
@@ -55,8 +42,6 @@ def show_winner(hist: dict, phenotype: callable):
         if phenotype:
             out_file.write("\n\n==================================\n\n")
             out_file.write(phenotype(hist["champion"][0]))
-    
-
 
 
 def plot_runs(hist: dict, show=True):
@@ -67,8 +52,9 @@ def plot_runs(hist: dict, show=True):
     x = 2
 
     fig, axs = plt.subplots(x, y, figsize=(10, 10), constrained_layout=True)
-    fig.suptitle('%s | best fit: %.4f' %
-                 (environ["GA_TITLE"], hist["champion"][1]), fontsize=16)
+    fig.suptitle(
+        "%s | best fit: %.4f" % (environ["GA_TITLE"], hist["champion"][1]), fontsize=16
+    )
 
     run = 0
     for line in axs:
@@ -78,14 +64,15 @@ def plot_runs(hist: dict, show=True):
             avg = [x for x in hist["runs"][run]["avg"]]
 
             ax.plot(best, label="best")
-            ax.plot(worst, color='r', label="worst", alpha=0.2)
-            ax.plot(avg, color='k', label="avg", alpha=0.6)
+            ax.plot(worst, color="r", label="worst", alpha=0.2)
+            ax.plot(avg, color="k", label="avg", alpha=0.6)
             ax.legend()
-            ax.set_title('run: %d | best fit: %.4f' %
-                         (run+1, hist["runs"][run]["winner"][1]))
+            ax.set_title(
+                "run: %d | best fit: %.4f" % (run + 1, hist["runs"][run]["winner"][1])
+            )
             ax.set_xlabel("Generations")
             ax.set_ylabel("Fitness")
-            run = run+1
+            run = run + 1
 
     plt.savefig(f'{environ["OUT_PATH"]}{environ["GA_TITLE"]}_runs')
 
@@ -111,23 +98,23 @@ def convergence_chart(hist: dict, show=True):
 
     fig = plt.figure(figsize=(10, 10))
     fig.canvas.set_window_title(f'{environ["GA_TITLE"]}')
-    fig.suptitle('%s | best fit: %.4f' % (environ["GA_TITLE"], hist["champion"][1]),
-                 fontsize=16
-                 )
+    fig.suptitle(
+        "%s | best fit: %.4f" % (environ["GA_TITLE"], hist["champion"][1]), fontsize=16
+    )
     plt.title("convergence graph")
 
     plt.plot(avg["best"], label="best")
-    plt.plot(avg["avg"], color='k', label="avg")
+    plt.plot(avg["avg"], color="k", label="avg")
     # plt.plot(avg["worst"], color='r', label="worst")
 
     plt.xlabel("Generations")
     plt.ylabel("Fitness")
     plt.fill_between(
         range(int(environ["GEN"])),
-        np.array(avg["best"])-np.array(avg["best_std"]),
-        np.array(avg["best"])+np.array(avg["best_std"]),
-        alpha=.15,
-        label="best_std"
+        np.array(avg["best"]) - np.array(avg["best_std"]),
+        np.array(avg["best"]) + np.array(avg["best_std"]),
+        alpha=0.15,
+        label="best_std",
     )
     plt.legend(loc="lower right")
 
