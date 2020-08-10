@@ -1,9 +1,8 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-from csaps import csaps as CubicSpline
 from os import environ
-
+from scipy.interpolate import CubicSpline
 
 
 def show_population(population: list, top=10, best=True):
@@ -60,20 +59,13 @@ def plot_runs(hist: dict, show=True):
     run = 0
     for line in axs:
         for ax in line:
-            for config in [{'label':'best','color':None}, {'label':'worst','color':'red'}, {'label':'avg','color':'k'}]:
-                
-                # best = [x[1] for x in hist["runs"][run]["best"]]
-                
-                w_x = np.arange(len(hist["runs"][run][config['label']]))
-                w_y = [x[1] for x in hist["runs"][run][config['label']]]
-                w_xs = np.linspace(w_x[0], w_x[-1], 300)
-                w_ys = CubicSpline(w_x, w_y, w_xs, smooth=0.33)
-                
-                # avg = [x for x in hist["runs"][run]["avg"]]
-                
-                # ax.plot(best, label="best")
-                ax.plot(w_xs, w_ys, color=config['color'], label=config['label'], alpha=0.5)
-                # ax.plot(avg, color="k", label="avg", alpha=0.6)
+            best = [x[1] for x in hist["runs"][run]["best"]]
+            worst = [x[1] for x in hist["runs"][run]["worst"]]
+            avg = [x for x in hist["runs"][run]["avg"]]
+
+            ax.plot(best, label="best")
+            ax.plot(worst, color="r", label="worst", alpha=0.2)
+            ax.plot(avg, color="k", label="avg", alpha=0.6)
             ax.legend()
             ax.set_title(
                 "run: %d | best fit: %.4f" % (run + 1, hist["runs"][run]["winner"][1])
