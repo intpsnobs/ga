@@ -5,6 +5,7 @@ import galapagos.operators.crossover as cr
 import galapagos.operators.mutation as mt
 import galapagos.selector as sl
 from galapagos.log_handler import plot_runs, convergence_chart
+from numba import njit
 
 
 def show_table(chromosome: np.ndarray) -> str:
@@ -23,7 +24,7 @@ def show_table(chromosome: np.ndarray) -> str:
 
     return out
 
-
+@njit
 def fitness(individual: ndarray):
     dim = len(individual)
     max_fit = dim * (dim - 1)
