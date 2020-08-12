@@ -89,7 +89,7 @@ def convergence_chart(hist: dict, show=True):
         for j in range(int(environ["RUN"])):
             aux_best.append(hist["runs"][j]["best"][i][1])
             aux_worst.append(hist["runs"][j]["worst"][i][1])
-            aux_avg.append(hist["runs"][j]["avg"][i])
+            aux_avg.append(hist["runs"][j]["avg"][i][1])
 
         avg["best"].append(np.average(aux_best))
         avg["avg"].append(np.average(aux_avg))
