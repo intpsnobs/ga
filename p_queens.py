@@ -40,7 +40,7 @@ def show_table(chromosome: np.ndarray) -> str:
 def fitness(individual: ndarray):
     dim = len(individual)
     fit = dim * (dim - 1)
-    max_fit = fit + max_fit_profit*0.001
+    max_fit = fit*0.8 + max_fit_profit*0.2
 
     profit: float = 0
     for i in range(len(individual) - 1):
@@ -48,7 +48,7 @@ def fitness(individual: ndarray):
         for j in range(i + 1, len(individual)):
             fit -= 2 * (abs(individual[i] - individual[j]) == abs(i - j))
 
-    return individual, (fit + profit*0.001) / max_fit
+    return individual, (fit*0.8 + profit*0.2) / max_fit
 
 
 if __name__ == "__main__":
