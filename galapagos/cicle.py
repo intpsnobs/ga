@@ -72,7 +72,7 @@ def generation_run(
         avg = reduce(lambda a, b: a + b[1], evaluated, 0) / len(evaluated)
 
         generations_hist["best"].append(evaluated[-1])
-        generations_hist["avg"].append(avg)
+        generations_hist["avg"].append([0,avg])
         generations_hist["worst"].append(evaluated[0])
         generations_hist["winner"] = max(
             evaluated[-1], generations_hist["winner"], key=lambda x: x[1]
