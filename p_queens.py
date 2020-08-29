@@ -72,6 +72,7 @@ if __name__ == "__main__":
         select_function=sl.stochastic_tournament,
         config_file="p_queens.cfg",
         phenotype=show_table,
+        pool_size=2
     )
 
     

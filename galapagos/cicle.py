@@ -6,7 +6,7 @@ from functools import reduce
 from tqdm import tqdm
 from functools import partial
 import time
-
+from math import sqrt
 
 def select(population: np.ndarray, selection_function: callable):
     population = list(population)
@@ -90,6 +90,8 @@ def generation_run(
     generations_hist["best"] = np.array(generations_hist["best"], object)
     generations_hist["avg"] = np.array(generations_hist["avg"], object)
     generations_hist["worst"] = np.array(generations_hist["worst"], object)
+    with open(f"out/temp.txt", "a+") as temp:
+        temp.write(str(generations_hist["winner"][1]) + "\n")
 
     return generations_hist
 
@@ -109,6 +111,9 @@ def run(
     populator = population.get()
 
     runs_hist = {"champion": (None, -1), "runs": []}
+
+    with open('out/temp.txt', 'w+') as f:
+        pass
 
     for run in range(int(environ["RUN"])):
 
@@ -130,5 +135,21 @@ def run(
     runs_hist["runs"] = np.array(runs_hist["runs"], dtype=object)
 
     log_handler.show_winner(runs_hist, phenotype)
+
+    with open(f'out/temp.txt', 'r+') as f:
+        avg = 0
+        data = []
+        for line in f:
+            data.append(float(line))
+            avg += float(line)
+
+        avg /= len(data)
+        sum = 0
+        for d in data:
+            sum += (d-avg) ** 2
+        sum /= len(data)
+        sum = sqrt(sum)
+        f.flush()
+        f.write("SD: " + str(sum) + "\n")
 
     return runs_hist
