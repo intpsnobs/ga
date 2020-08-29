@@ -5,10 +5,11 @@ import galapagos.operators.crossover as cr
 import galapagos.operators.mutation as mt
 import galapagos.selector as sl
 from galapagos.log_handler import plot_runs, convergence_chart
-from galapagos.config import parse 
+from galapagos.config import parse
 from numba import njit
 from os import environ
 import math
+
 
 def show_table(chromosome: np.ndarray) -> str:
     size = len(chromosome)
@@ -26,44 +27,44 @@ def show_table(chromosome: np.ndarray) -> str:
 
     col, profit = 0, 0
     for i in range(len(chromosome) - 1):
-        profit += profit_array[(i+1)*(chromosome[i]-1)]
+        profit += profit_array[(i + 1) * (chromosome[i] - 1)]
         for j in range(i + 1, len(chromosome)):
             col += 2 * (abs(chromosome[i] - chromosome[j]) == abs(i - j))
 
     out += f"\ncollisions: {col}\n"
-    out += "profit: %f/%f\n"% (profit, max_fit_profit)
-
+    out += "profit: %f/%f\n" % (profit, max_fit_profit)
 
     return out
+
 
 @njit
 def fitness(individual: ndarray):
     dim = len(individual)
     fit = dim * (dim - 1)
-    max_fit = fit*0.8 + max_fit_profit*0.2
+    max_fit = fit * 0.8 + max_fit_profit * 0.2
 
     profit: float = 0
     for i in range(len(individual) - 1):
-        profit += profit_array[(i+1)*(individual[i]-1)]
+        profit += profit_array[(i + 1) * (individual[i] - 1)]
         for j in range(i + 1, len(individual)):
             fit -= 2 * (abs(individual[i] - individual[j]) == abs(i - j))
 
-    return individual, (fit*0.8 + profit*0.2) / max_fit
+    return individual, (fit * 0.8 + profit * 0.2) / max_fit
 
 
 if __name__ == "__main__":
     parse("p_queens.cfg")
     array_length = int(environ.get("DIM"))
 
-    profit_array = np.array(list(map(float,range(1,array_length**2+1))))
+    profit_array = np.array(list(map(float, range(1, array_length ** 2 + 1))))
     op, po = math.sqrt, math.log10
     for i in range(len(profit_array)):
         profit_array[i] = op(profit_array[i])
-        if not (i+1) % array_length:
+        if not (i + 1) % array_length:
             po, op = op, po
             continue
-    
-    max_fit_profit = sum(sorted(profit_array)[-1:-array_length-1:-1])
+
+    max_fit_profit = sum(sorted(profit_array)[-1 : -array_length - 1 : -1])
     # print(fitness(np.array([7, 5, 3, 1, 6, 8, 2, 4])))
     result = gp.run(
         fitness,
@@ -72,10 +73,8 @@ if __name__ == "__main__":
         select_function=sl.stochastic_tournament,
         config_file="p_queens.cfg",
         phenotype=show_table,
-        pool_size=2
+        pool_size=4,
     )
-
-    
 
     convergence_chart(result, False)
     plot_runs(result)
