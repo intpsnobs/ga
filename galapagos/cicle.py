@@ -1,6 +1,6 @@
 from galapagos import population, config, log_handler
 import numpy as np
-from pathos.multiprocessing import ProcessingPool as Pool
+from pathos.multiprocessing import ThreadingPool as Pool
 from os import environ
 from functools import reduce
 from tqdm import tqdm
