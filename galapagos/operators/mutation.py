@@ -28,6 +28,7 @@ def random_replacement(chromosome: np.ndarray, **kwargs) -> np.ndarray:
     chromosome[point] = np.random.randint(
         low=int(environ["LOW"]), high=int(environ["HIGH"])
     )
+    return chromosome
 
 
 def __delta(t, y, b=5):

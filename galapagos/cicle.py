@@ -8,6 +8,7 @@ from functools import partial
 import time
 from math import sqrt
 
+
 def select(population: np.ndarray, selection_function: callable):
     population = list(population)
     population = np.array(population, dtype=object)
@@ -23,7 +24,6 @@ def select(population: np.ndarray, selection_function: callable):
 
 def evaluate(fitness: callable, population: np.ndarray, pool_size: int):
     pool = Pool(pool_size)
-
     evaluated_population = pool.map(fitness, population)
     evaluated_population.sort(key=lambda x: x[1])
 
@@ -72,13 +72,15 @@ def generation_run(
         avg = reduce(lambda a, b: a + b[1], evaluated, 0) / len(evaluated)
 
         generations_hist["best"].append(evaluated[-1])
-        generations_hist["avg"].append([0,avg])
+        generations_hist["avg"].append([0, avg])
         generations_hist["worst"].append(evaluated[0])
         generations_hist["winner"] = max(
             evaluated[-1], generations_hist["winner"], key=lambda x: x[1]
         )
 
         selected, elite = select(evaluated, select_function)
+        # [print(x) for x in selected]
+        # print(elite)
 
         population = mutate(
             crossover(selected, crossover_function), mutation_function, iteration=_
@@ -112,7 +114,7 @@ def run(
 
     runs_hist = {"champion": (None, -1), "runs": []}
 
-    with open('out/temp.txt', 'w+') as f:
+    with open("out/temp.txt", "w+") as f:
         pass
 
     for run in range(int(environ["RUN"])):
@@ -136,7 +138,7 @@ def run(
 
     log_handler.show_winner(runs_hist, phenotype)
 
-    with open(f'out/temp.txt', 'r+') as f:
+    with open(f"out/temp.txt", "r+") as f:
         avg = 0
         data = []
         for line in f:
@@ -146,7 +148,7 @@ def run(
         avg /= len(data)
         sum = 0
         for d in data:
-            sum += (d-avg) ** 2
+            sum += (d - avg) ** 2
         sum /= len(data)
         sum = sqrt(sum)
         f.flush()

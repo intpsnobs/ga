@@ -1,0 +1,17 @@
+README.md
+setup.py
+galapagos/__init__.py
+galapagos/cicle.py
+galapagos/config.py
+galapagos/log_handler.py
+galapagos/population.py
+galapagos/selector.py
+galapagos/utils.py
+galapagos.egg-info/PKG-INFO
+galapagos.egg-info/SOURCES.txt
+galapagos.egg-info/dependency_links.txt
+galapagos.egg-info/requires.txt
+galapagos.egg-info/top_level.txt
+galapagos/operators/__init__.py
+galapagos/operators/crossover.py
+galapagos/operators/mutation.py
